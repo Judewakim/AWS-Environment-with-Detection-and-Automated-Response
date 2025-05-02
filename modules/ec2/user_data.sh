@@ -10,21 +10,21 @@
 
 #!/bin/bash
 
-# Log start
-exec > >(tee /var/log/user_data.log|logger -t user-data -s 2>/dev/console) 2>&1
+# Log start (DOESNT WORK)
+# exec > >(tee /var/log/user_data.log|logger -t user-data -s 2>/dev/console) 2>&1
 
 # Update packages
-yum update -y
+sudo yum update -y
 
 # Install Apache
-yum install -y httpd
+sudo yum install -y httpd
 
 # Enable and start Apache
-systemctl enable httpd
-systemctl start httpd
+sudo systemctl enable httpd
+sudo systemctl start httpd
 
 # Add basic webpage
-cat <<EOF > /var/www/html/index.html
+sudo tee /var/www/html/index.html > /dev/null <<EOF
 <html>
   <head><title>Web Server</title></head>
   <body>
@@ -35,4 +35,5 @@ cat <<EOF > /var/www/html/index.html
 EOF
 
 # Log completion
-echo "Web server setup complete at $(date)" >> /var/log/user_data.log
+echo "Web server setup complete at $(date)" | sudo tee -a /var/log/user_data.log > /dev/null
+
