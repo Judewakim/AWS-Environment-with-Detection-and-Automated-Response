@@ -8,12 +8,22 @@ variable "public_subnet_cidr" {
   description = "CIDR block for the public subnet"
 }
 
-variable "private_subnet_cidr" {
+variable "private_subnet_cidr_1" {
   default     = "10.0.2.0/24"
   description = "CIDR block for the private subnet"
 }
 
-variable "availability_zone" {
+variable "private_subnet_cidr_2" {
+  default     = "10.0.3.0/24"
+  description = "CIDR block for the private subnet"
+}
+
+variable "availability_zone_1" {
   default     = "us-east-1a"
+  description = "Availability zone for the subnets"
+}
+
+variable "availability_zone_2" {
+  default     = "us-east-1b"
   description = "Availability zone for the subnets"
 }

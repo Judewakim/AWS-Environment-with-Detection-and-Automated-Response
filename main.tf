@@ -1,6 +1,5 @@
 module "network" {
   source            = "./modules/network"
-  availability_zone = "us-east-1a"
 }
 
 
@@ -8,10 +7,10 @@ module "s3_logging" {
   source = "./modules/s3_logging"
 }
 
-module "security_services" {
-  source          = "./modules/security_services"
-  log_bucket_name = module.s3_logging.bucket_name
-}
+# module "security_services" {
+#   source          = "./modules/security_services"
+#   log_bucket_name = module.s3_logging.bucket_name
+# }
 
 module "ec2" {
   source           = "./modules/ec2"
@@ -20,7 +19,7 @@ module "ec2" {
   instance_type    = "t2.micro"
   ami_id           = "ami-0b86aaed8ef90e45f" #Amazon Linux 2 AMI
   key_name         = aws_key_pair.bastion_key.key_name
-  my_ip = data.external.my_ip.result["ip"]
+  my_ip            = data.external.my_ip.result["ip"]
 }
 
 module "sns_alerts" {
@@ -39,3 +38,12 @@ data "external" "my_ip" {
 # locals {
 #   my_ip = "${trimspace(data.http.my_ip.response_body)}/32"
 # }
+
+module "rds" {
+  source = "./modules/rds"
+
+  vpc_id             = module.network.vpc_id
+  private_subnet_ids = module.network.private_subnet_ids
+  db_name            = var.db_name
+  db_password        = var.db_password
+}
