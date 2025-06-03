@@ -11,7 +11,7 @@ variable "private_subnet_ids" {
 variable "db_username" {
   description = "Master DB username"
   type        = string
-  default = "playground-db-user"
+  default = "playgrounddbuser"
 }
 
 variable "db_password" {
@@ -29,7 +29,7 @@ variable "db_name" {
 variable "instance_class" {
   description = "RDS instance type"
   type        = string
-  default     = "db.t2.micro"
+  default     = "db.t3.micro"
 }
 
 variable "engine" {

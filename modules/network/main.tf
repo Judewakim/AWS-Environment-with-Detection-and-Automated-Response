@@ -12,7 +12,7 @@ resource "aws_vpc" "main" {
 resource "aws_subnet" "public" {
   vpc_id     = aws_vpc.main.id
   cidr_block = var.public_subnet_cidr
-  availability_zone       = var.availability_zone
+  availability_zone       = var.availability_zone_1
   map_public_ip_on_launch = true
 
   tags = {
@@ -21,15 +21,26 @@ resource "aws_subnet" "public" {
 }
 
 #private subnet
-resource "aws_subnet" "private" {
+resource "aws_subnet" "private_1" {
   vpc_id                  = aws_vpc.main.id
-  cidr_block              = var.private_subnet_cidr
-  availability_zone       = var.availability_zone
+  cidr_block              = var.private_subnet_cidr_1
+  availability_zone       = var.availability_zone_1
   map_public_ip_on_launch = false
   tags = {
-    Name = "private-subnet"
+    Name = "private-subnet-1"
   }
 }
+
+resource "aws_subnet" "private_2" {
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = var.private_subnet_cidr_2
+  availability_zone       = var.availability_zone_2
+  map_public_ip_on_launch = false
+  tags = {
+    Name = "private-subnet-2"
+  }
+}
+
 
 #igw
 resource "aws_internet_gateway" "igw" {

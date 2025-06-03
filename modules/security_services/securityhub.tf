@@ -1,1 +1,1 @@
-resource "aws_securityhub_account" "main" {}
+# resource "aws_securityhub_account" "main" {}
