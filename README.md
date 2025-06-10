@@ -13,14 +13,15 @@
 
   The core of this project is the orchestration of AWS security services:
 
-  - AWS Config for resource inventory, compliance auditing, and change tracking
-  - AWS CloudTrail for API activity logging across the account
-  - Amazon GuardDuty for continuous threat detection and anomaly monitoring
-  - AWS Security Hub for centralized compliance insights and standardized findings
-  - SNS for alert distribution and notification
-  - Terraform for modular, scalable infrastructure-as-code
+  - **AWS Config** for resource inventory, compliance auditing, and change tracking
+  - **AWS CloudTrail** for API activity logging across the account
+  - **Amazon GuardDuty** for continuous threat detection and anomaly monitoring
+  - **AWS Security Hub** for centralized compliance insights and standardized findings
+  - **SNS** for alert distribution and notification
+  - **Terraform** for modular, scalable infrastructure-as-code
+  - **Third-party Security Tools** for a robust,secure environment
 
-  Future enhancements will include EventBridge-triggered Lambda automation to remediate findings in real time (e.g., EC2 isolation, IAM access revocation).
+  Future enhancements will include **EventBridge-triggered Lambda** automation to remediate findings in real time (e.g., EC2 isolation, IAM access revocation).
   
   ## 🛠️ Modules
 
