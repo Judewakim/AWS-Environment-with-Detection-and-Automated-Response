@@ -1,7 +1,9 @@
 module "network" {
-  source            = "./modules/network"
-}
+  source = "./modules/network"
 
+  availability_zone_1 = var.availability_zone_1
+  availability_zone_2 = var.availability_zone_2
+}
 
 module "s3_logging" {
   source = "./modules/s3_logging"
@@ -46,4 +48,28 @@ module "rds" {
   private_subnet_ids = module.network.private_subnet_ids
   db_name            = var.db_name
   db_password        = var.db_password
+}
+
+module "security_services" {
+  source = "./modules/security_services"
+
+  # General config
+  aws_region = var.aws_region
+  project_prefix      = var.project_prefix
+  environment         = var.environment
+
+  # Core service-level toggles
+  enable_config      = var.enable_config
+  enable_guardduty   = var.enable_guardduty 
+  enable_securityhub = var.enable_securityhub
+
+  # Fine-grained Config rule toggles
+  enable_iam_config                   = var.enable_iam_config
+  enable_ec2_config                   = var.enable_ec2_config
+  enable_rds_config                   = var.enable_rds_config
+  enable_cloudwatchcloudtrail_config = var.enable_cloudwatchcloudtrail_config
+  enable_cloudfrontcloudwatch_config = var.enable_cloudfrontcloudwatch_config
+  enable_acm_config                   = var.enable_acm_config
+  enable_alb_config                   = var.enable_alb_config
+  enable_vpc_config                   = var.enable_vpc_config
 }
