@@ -1,131 +1,118 @@
-# AWS Environment with Detection and Automated Response
+# AWS Detection & Response Framework
 
-A secure, production-style AWS environment for a web application, integrated with AWS security services for monitoring, alerting, and automated response.
+  This project is a modular, Terraform-based AWS security solution that integrates native AWS services to build a detection and response framework suitable for mid-market and enterprise environments.
 
-## Overview
-
-This project provisions a robust AWS infrastructure using Terraform, encompassing:
-
-* A Virtual Private Cloud (VPC) with public and private subnets
-* EC2 instances serving as a bastion host and web server
-* An Amazon RDS database instance in a private subnet
-* Security configurations including Security Groups and IAM roles
-* Integration with AWS security services for threat detection and automated response
-
-The architecture ensures that the web server and RDS database are securely deployed, with the bastion host facilitating secure administrative access.
-
-## Architecture Diagram
-
-![Network Architecture](networkDiagram.png)
-
-## 📦 Modules
-
-* **network**: Provisions VPC, public/private subnets, route tables, and internet/NAT gateways.
-* **ec2**: Deploys a Bastion host and Web Server in the public subnet with security groups and user data.
-* **s3_logging**: Creates S3 buckets with proper logging configuration and encryption for audit/compliance.
-* **security_services**: Enables AWS Config, CloudTrail, and optionally Security Hub for continuous monitoring.
-* **sns_alerts**:	Configures an SNS topic and email subscription to send security or compliance alerts.
-* **rds**: Launches an encrypted RDS database instance in the private subnet using a subnet group.
-
-## Prerequisites
-
-* [Terraform](https://www.terraform.io/downloads.html) installed
-* An AWS account with appropriate permissions
-* An existing SSH key pair for EC2 instance access
-
-## 📝 Setup Instructions
-
-1. **Clone the Repository**
-
-   ```bash
-   git clone https://github.com/Judewakim/AWS-Environment-with-Detection-and-Automated-Response.git
-   cd AWS-Environment-with-Detection-and-Automated-Response
-   ```
+  While a sample VPC environment with EC2 and RDS resources is deployed for testing, the focus of this project is the security services and automation foundation that will evolve into a reusable security framework.
 
 
 
-2. **Initialize Terraform**
 
-   ```bash
-   terraform init
-   ```
+   ![Network Architecture](networkDiagram.png)
 
+  ## 🔐 Project Focus
 
+  The core of this project is the orchestration of AWS security services:
 
-3. **Configure Variables**
+  - AWS Config for resource inventory, compliance auditing, and change tracking
+  - AWS CloudTrail for API activity logging across the account
+  - Amazon GuardDuty for continuous threat detection and anomaly monitoring
+  - AWS Security Hub for centralized compliance insights and standardized findings
+  - SNS for alert distribution and notification
+  - Terraform for modular, scalable infrastructure-as-code
 
-   Edit the `variables.tf` file or create a `terraform.tfvars` file to set the necessary variables, such as:
+  Future enhancements will include EventBridge-triggered Lambda automation to remediate findings in real time (e.g., EC2 isolation, IAM access revocation).
+  
+  ## 🛠️ Modules
 
-   * `aws_region`
-   * `ami_id`
-   * `instance_type`
-   * `key_name`
-   * `db_name`
-   * `db_username`
-   * `db_password`
+  - **security_services**: 
+    - Enables GuardDuty (regional + multi-AZ support)
+    - Configures AWS Config with global + regional resource recorders
+    - Sets up CloudTrail logging to a secured S3 bucket
+    - Optionally enables Security Hub and selected standards
+  - **sns_alerts**: 
+    - Creates SNS topic for notifications
+    - Email-based alert subscription for findings and compliance events
+  - **s3_logging**: 
+    - Creates encrypted logging buckets for Config and CloudTrail
+  - **network** *(demo/test only)*: 
+    - VPC with public/private subnets, NAT, and route tables
+  - **ec2** *(demo/test only)*: 
+    - Bastion and Web Server with IAM roles and SSM support
+  - **rds** *(demo/test only)*: 
+    - Encrypted PostgreSQL instance with subnet group
 
-4. **Apply the Terraform Configuration**
+  ## 🧪 Test Environment
 
-   ```bash
-   terraform apply
-   ```
+  The EC2 and RDS deployments simulate a client workload for evaluating the security framework. You can replace or extend this with your actual infrastructure.
 
+  - Bastion: SSH or SSM-based administration
+  - Web Server: Public endpoint for HTTP access
+  - RDS: Encrypted private database instance
 
+  ## 📊 Security Hub Standards Enabled
 
-Review the planned actions and confirm to proceed.
+  If `enable_securityhub = true`, the following standards are automatically enabled and findings routed to Security Hub:
 
-## 🏞️ Accessing the Environment
+  | Standard                                    | Description |
+  |---------------------------------------------|-------------|
+  | **CIS AWS Foundations Benchmark v1.2.0**    | Baseline security best practices |
+  | **AWS Foundational Security Best Practices**| Service-specific security checks |
+  | **PCI DSS v3.2.1**                          | Payment industry compliance mapping |
 
-* **Bastion Host**: Use your SSH key to connect to the bastion host for administrative tasks.
+  Security Hub will auto-ingest findings from GuardDuty and AWS Config once the detector and recorder/delivery channels are properly initialized.
 
-```bash
-  ssh -i path/to/your-key.pem ec2-user@<bastion-public-ip>
-```
+  ## ⚙️ Setup Instructions
 
+  1. **Clone the repository**
 
+     ```bash
+     git clone https://github.com/Judewakim/AWS-Environment-with-Detection-and-Automated-Response.git
+     cd AWS-Environment-with-Detection-and-Automated-Response
+     ```
 
-* **Web Server**: Access the web application via the web server's public IP address in your browser.
+  2. **Initialize Terraform**
 
-* **RDS Database**: Connect to the RDS instance from the bastion host or web server using the database credentials.
+     ```bash
+     terraform init
+     ```
 
-## 🛡️ Security Features
+  3. **Configure your variables**
 
-This environment integrates AWS security services to enhance threat detection and response:
+     Create or edit `terraform.tfvars`:
 
-* **Amazon GuardDuty**: Monitors for malicious or unauthorized behavior.
+     ```hcl
+     aws_region         = "us-east-1"
+     key_name           = "your-key"
+     ami_id             = "ami-xxxxxxx"
+     instance_type      = "t3.micro"
+     db_name            = "appdb"
+     db_username        = "admin"
+     db_password        = "SecurePassword123"
+     enable_guardduty   = true
+     enable_config      = true
+     enable_securityhub = true
+     ```
 
-* **AWS Security Hub**: Provides a comprehensive view of security alerts and compliance status.
+  4. **Deploy the stack**
 
-* **AWS Systems Manager**: Facilitates secure and auditable instance management.
+     ```bash
+     terraform apply
+     ```
 
-Automated responses can be configured to remediate detected threats, such as isolating compromised instances or revoking access.
+     Confirm when prompted.
 
-## 🗑️ Cleanup
+  ## 🔁 Planned Automation
 
-To tear down the environment and avoid incurring charges:
+  EventBridge rules and Lambda functions will soon be added to act on specific Security Hub findings:
 
-```bash
-terraform destroy
-```
+  - Isolate EC2 instances flagged as compromised
+  - Revoke IAM credentials for suspicious activity
+  - Notify security teams with actionable context
+  - Automatically remediate failed Config rules
 
+  ## 🧼 Cleanup
 
+  Tear down the environment when finished:
 
-Confirm the destruction when prompted.
-
-## References
-
-* [AWS Security Hub](https://aws.amazon.com/security-hub/)
-* [Amazon GuardDuty](https://aws.amazon.com/guardduty/)
-* [AWS Systems Manager](https://aws.amazon.com/systems-manager/)
-* [Terraform AWS Provider](https://registry.terraform.io/providers/hashicorp/aws/latest/docs)
-
----
-
-For detailed information and updates, visit the [project repository](https://github.com/Judewakim/AWS-Environment-with-Detection-and-Automated-Response).
-
----
-
-[1]: https://github.com/aws-solutions/automated-security-response-on-aws?utm_source=chatgpt.com "aws-solutions/automated-security-response-on-aws - GitHub"
-[2]: https://github.com/adanalvarez/AWSIncidentResponseAutomations?utm_source=chatgpt.com "Easy to deploy automations for incident response in AWS - GitHub"
-[3]: https://github.com/aws-samples/automated-ec2-isolation-for-incident-response/blob/main/README.md?utm_source=chatgpt.com "automated-ec2-isolation-for-incident-response/README.md at main"
-[4]: https://aws.amazon.com/products/security/detection-and-response/?utm_source=chatgpt.com "Detection and Response on AWS - Amazon Web Services"
+  ```bash
+  terraform destroy
