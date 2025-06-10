@@ -22,6 +22,18 @@ output "enabled_security_standards" {
   ] : []
 }
 
+output "securityhub_summary" {
+  value = {
+    securityhub_enabled = var.enable_securityhub
+    enabled_standards   = var.enable_securityhub ? [
+      "CIS v1.2.0",
+      "AWS Best Practices v1.0.0",
+      "PCI DSS v3.2.1"
+    ] : []
+  }
+}
+
+
 output "guardduty_enabled" {
   description = "Boolean flag indicating whether GuardDuty is enabled."
   value       = var.enable_guardduty
@@ -34,10 +46,11 @@ output "config_enabled" {
 
 output "guardduty_detector_id" {
   description = "ID of the GuardDuty detector, if enabled."
-  value       = try(aws_guardduty_detector.this.id, null)
+  value       = try(aws_guardduty_detector.securityhub_account.id, null)
 }
 
 output "securityhub_account_id" {
   description = "Security Hub account resource ID (not the AWS account ID)."
-  value       = try(aws_securityhub_account.securityhub_account.id, null)
+  value = length(aws_securityhub_account.securityhub_account) > 0 ? aws_securityhub_account.securityhub_account[0].id : null
 }
+
