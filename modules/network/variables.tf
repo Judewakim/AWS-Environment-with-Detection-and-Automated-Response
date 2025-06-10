@@ -19,11 +19,9 @@ variable "private_subnet_cidr_2" {
 }
 
 variable "availability_zone_1" {
-  default     = "us-east-1a"
   description = "Availability zone for the subnets"
 }
 
 variable "availability_zone_2" {
-  default     = "us-east-1b"
   description = "Availability zone for the subnets"
 }
