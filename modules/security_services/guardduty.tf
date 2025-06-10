@@ -1,3 +1,3 @@
-# resource "aws_guardduty_detector" "main" {
-#   enable = true
-# }
+resource "aws_guardduty_detector" "securityhub_account" {
+  enable = true
+}

@@ -21,12 +21,6 @@ variable "enable_config" {
 variable "enable_securityhub" {
   type    = bool
   default = false
-
-  #ensure that Security Hub isn’t enabled unless one of its sources (like Config or GuardDuty) is enabled
-  validation {
-    condition     = !var.enable_securityhub || var.enable_config || var.enable_guardduty
-    error_message = "SecurityHub requires at least one source of findings (Config or GuardDuty) to be enabled."
-  }
 }
 
 variable "enable_guardduty" {
