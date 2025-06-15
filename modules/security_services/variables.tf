@@ -73,3 +73,11 @@ variable "enable_vpc_config" {
   type    = bool
   default = false
 }
+
+## only necessary if 'enable_vpc_config' is called directly from the security_services/variables.tf instead of the root variables.tf (using 'enable_vpc_config = module.security_services.enable_vpc_config')
+# variable "enable_vpc_flow_logs_config_rule" {
+#   description = "Enable AWS Config rule to check VPC Flow Logs"
+#   type        = bool
+#   default     = false
+# }
+
