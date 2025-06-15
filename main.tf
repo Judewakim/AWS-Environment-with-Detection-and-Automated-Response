@@ -71,5 +71,6 @@ module "security_services" {
   enable_cloudfrontcloudwatch_config = var.enable_cloudfrontcloudwatch_config
   enable_acm_config                  = var.enable_acm_config
   enable_alb_config                  = var.enable_alb_config
-  enable_vpc_config                  = var.enable_vpc_config
+  enable_vpc_config                  = var.enable_vpc_config 
+  # enable_vpc_config = module.security_services.enable_vpc_config
 }

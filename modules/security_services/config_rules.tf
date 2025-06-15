@@ -307,6 +307,10 @@ resource "aws_config_config_rule" "alb_http_to_https_redirection_check" {
 
 resource "aws_config_config_rule" "vpc_flow_logs_enabled" {
   count = var.enable_config && var.enable_vpc_config ? 1 : 0
+
+  ## only necessary if 'enable_vpc_config' is called directly from the security_services/variables.tf instead of the root variables.tf (using 'enable_vpc_config = module.security_services.enable_vpc_config')
+  #count = var.enable_vpc_flow_logs_config_rule ? 1 : 0
+
   name   = "vpc-flow-logs-enabled"
   source {
     owner             = "AWS"
