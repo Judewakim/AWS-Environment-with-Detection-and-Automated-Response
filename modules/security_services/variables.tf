@@ -28,6 +28,11 @@ variable "enable_guardduty" {
   default = false
 }
 
+variable "security_log_bucket_name" {
+  description = "Name of the central security S3 bucket for all services."
+  type        = string
+}
+
 #enabling config rules
 variable "enable_iam_config" {
   type    = bool
@@ -81,3 +86,21 @@ variable "enable_vpc_config" {
 #   default     = false
 # }
 
+#cloudtrail services
+variable "cloudtrail_org_trail" {
+  description = "Whether this is an organization-wide trail (multi-account)."
+  type        = bool
+  default     = false
+}
+
+variable "cloudtrail_all_regions" {
+  description = "Whether the trail should log across all AWS regions."
+  type        = bool
+  default     = true
+}
+
+variable "cloudtrail_enable_insights" {
+  description = "Enable CloudTrail Insights for unusual API activity."
+  type        = bool
+  default     = true
+}
