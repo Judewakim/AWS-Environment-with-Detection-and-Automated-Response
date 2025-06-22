@@ -1,23 +1,20 @@
-//account
+#########USER ACCOUNT##############
 variable "aws_region" {
-  default = "us-east-1"
+  default = "us-east-1" //MOVE TO TFVARS
 }
 
 variable "project_prefix" {
   description = "Prefix for naming resources"
   type        = string
-  default     = "wakimworks" //or remove from here and set them in CLI during terraform apply or MOVE TO TFVARS
 }
 
 variable "environment" {
   description = "Environment name (e.g. dev, prod)"
   type        = string
-  default     = "dev" //or remove from here and set them in CLI during terraform apply  or MOVE TO TFVARS
-
 }
 
 
-//rds
+################RDS######################
 variable "db_password" {
   description = "Master DB password"
   type        = string
@@ -27,7 +24,6 @@ variable "db_password" {
 variable "db_name" {
   description = "Database name"
   type        = string
-  default     = "playground-dbname" //or remove from here and set them in CLI during terraform apply  or MOVE TO TFVARS
 
 }
 
@@ -40,7 +36,18 @@ variable "availability_zone_2" {
 }
 
 
-//enabling services
+##########CENTRALIZED LOG BUCKET######################
+variable "centralized_log_bucket" {
+  description = "log bucket for config, guardduty, cloudtrail"
+  type = string
+
+  validation {
+    condition     = length(var.centralized_log_bucket) > 0
+    error_message = "A valid centralized_log_bucket name must be provided."
+  }
+}
+
+##############SERVICES#####################
 variable "enable_config" {
   type    = bool
   default = false
@@ -56,8 +63,13 @@ variable "enable_guardduty" {
   default = false
 }
 
+variable "enable_cloudtrail" {
+  type = bool
+  default = false
+}
 
-#enabling config rules
+
+#############CONFIG RULES###############
 variable "enable_iam_config" {
   type    = bool
   default = false
@@ -99,6 +111,22 @@ variable "enable_alb_config" {
 }
 
 variable "enable_vpc_config" {
+  type    = bool
+  default = false
+}
+
+#########IAM GROUPS#################
+variable "enable_admin_group" {
+  type    = bool
+  default = true
+}
+
+variable "enable_accounting_group" {
+  type    = bool
+  default = false
+}
+
+variable "enable_sales_group" {
   type    = bool
   default = false
 }
