@@ -1,17 +1,32 @@
-output "config_bucket_name" {
-  description = "S3 bucket used by AWS Config to store configuration history and snapshots."
-  value       = try(aws_s3_bucket.config_logs.bucket, null)
+//services enabled
+output "guardduty_enabled" {
+  description = "Boolean flag indicating whether GuardDuty is enabled."
+  value       = var.enable_guardduty
 }
 
-output "config_role_arn" {
-  description = "IAM role used by AWS Config."
-  value       = try(aws_iam_role.config_role.arn, null)
+output "config_enabled" {
+  description = "Boolean flag indicating whether AWS Config is enabled."
+  value       = var.enable_config
 }
 
 output "securityhub_enabled" {
   description = "Boolean flag indicating whether AWS Security Hub is enabled."
   value       = var.enable_securityhub
 }
+
+
+//config
+output "config_bucket_name" {
+  description = "S3 bucket used by AWS Config to store configuration history and snapshots."
+  value       = try(var.log_bucket_name, null)
+}
+
+output "config_role_arn" {
+  description = "IAM role used by AWS Config."
+  value = aws_iam_role.config_role.arn
+}
+
+
 
 output "enabled_security_standards" {
   description = "List of Security Hub compliance standards enabled in this deployment."
@@ -20,6 +35,26 @@ output "enabled_security_standards" {
     "AWS Foundational Security Best Practices v1.0.0",
     "PCI DSS v3.2.1"
   ] : []
+}
+
+
+
+
+
+//guardduty
+output "guardduty_detector_id" {
+  description = "ID of the GuardDuty detector, if enabled."
+  value       = try(aws_guardduty_detector.securityhub_account.id, null)
+}
+
+//security hub
+output "securityhub_account_id" {
+  description = "Security Hub account resource ID (not the AWS account ID)."
+  value = (
+    length(aws_securityhub_account.securityhub_account) > 0
+    ? aws_securityhub_account.securityhub_account[0].id
+    : null
+  )
 }
 
 output "securityhub_summary" {
@@ -33,24 +68,13 @@ output "securityhub_summary" {
   }
 }
 
-
-output "guardduty_enabled" {
-  description = "Boolean flag indicating whether GuardDuty is enabled."
-  value       = var.enable_guardduty
+//cloudtrail
+output "cloudtrail_arn" {
+  value       = var.enable_cloudtrail ? aws_cloudtrail.securecloud_trail[0].arn : null
+  description = "ARN of the CloudTrail trail"
 }
 
-output "config_enabled" {
-  description = "Boolean flag indicating whether AWS Config is enabled."
-  value       = var.enable_config
+output "cloudtrail_name" {
+  value       = var.enable_cloudtrail ? aws_cloudtrail.securecloud_trail[0].name : null
+  description = "Name of the CloudTrail trail"
 }
-
-output "guardduty_detector_id" {
-  description = "ID of the GuardDuty detector, if enabled."
-  value       = try(aws_guardduty_detector.securityhub_account.id, null)
-}
-
-output "securityhub_account_id" {
-  description = "Security Hub account resource ID (not the AWS account ID)."
-  value = length(aws_securityhub_account.securityhub_account) > 0 ? aws_securityhub_account.securityhub_account[0].id : null
-}
-

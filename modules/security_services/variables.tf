@@ -12,7 +12,7 @@ variable "aws_region" {
   default = "us-east-1"
 }
 
-#enabling services
+################ENABLE SERVICES###############
 variable "enable_config" {
   type    = bool
   default = false
@@ -28,12 +28,31 @@ variable "enable_guardduty" {
   default = false
 }
 
-variable "security_log_bucket_name" {
-  description = "Name of the central security S3 bucket for all services."
-  type        = string
+variable "enable_cloudtrail" {
+  type = bool
+  default = false
 }
 
-#enabling config rules
+############# CENTRALIZED BUCKET ##################
+variable "centralized_log_bucket" {
+  description = "log bucket for config, guardduty, cloudtrail"
+  type = string
+
+  validation {
+    condition     = length(var.centralized_log_bucket) > 0
+    error_message = "A valid centralized_log_bucket name must be provided."
+  }
+}
+
+variable "bucket_name" {
+  type = string
+}
+
+variable "log_bucket_name" {
+  type = string
+}
+
+##########ENABLING CONFIG RULES############
 variable "enable_iam_config" {
   type    = bool
   default = false
@@ -86,7 +105,7 @@ variable "enable_vpc_config" {
 #   default     = false
 # }
 
-#cloudtrail services
+########CLOUDTRAIL SERVICES###################
 variable "cloudtrail_org_trail" {
   description = "Whether this is an organization-wide trail (multi-account)."
   type        = bool
@@ -103,4 +122,25 @@ variable "cloudtrail_enable_insights" {
   description = "Enable CloudTrail Insights for unusual API activity."
   type        = bool
   default     = true
+}
+
+variable "global_service_events" {
+  type = bool
+  default = false
+}
+
+#########IAM###############
+variable "enable_admin_group" {
+  type    = bool
+  default = true
+}
+
+variable "enable_accounting_group" {
+  type    = bool
+  default = false
+}
+
+variable "enable_sales_group" {
+  type    = bool
+  default = false
 }
