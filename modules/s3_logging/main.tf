@@ -31,3 +31,33 @@ resource "aws_s3_bucket_public_access_block" "config_logs" {
   ignore_public_acls      = true
   restrict_public_buckets = true
 }
+
+resource "aws_s3_bucket_policy" "config_logs_policy" {
+  bucket = aws_s3_bucket.config_logs.id
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Sid       = "AWSConfigBucketPermissionsCheck",
+        Effect    = "Allow",
+        Principal = {
+          Service = "config.amazonaws.com"
+        },
+        Action    = "s3:GetBucketAcl",
+        Resource  = "arn:aws:s3:::${aws_s3_bucket.config_logs.id}"
+      },
+      {
+        Sid       = "AWSConfigBucketDelivery",
+        Effect    = "Allow",
+        Principal = {
+          Service = "config.amazonaws.com"
+        },
+        Action    = "s3:PutObject",
+        Resource  = "arn:aws:s3:::${aws_s3_bucket.config_logs.id}/config/AWSLogs/${data.aws_caller_identity.current.account_id}/*"
+      }
+    ]
+  })
+}
+
+data "aws_caller_identity" "current" {}

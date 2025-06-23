@@ -4,7 +4,7 @@ resource "aws_cloudtrail" "securecloud_trail" {
 
   name                          = "${var.project_prefix}-securecloud"
   s3_bucket_name                = var.log_bucket_name
-  s3_key_prefix                 = "cloudtrail/"
+  s3_key_prefix                 = "cloudtrail"
 
   include_global_service_events = var.global_service_events
   is_multi_region_trail         = var.cloudtrail_all_regions
