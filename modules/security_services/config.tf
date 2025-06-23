@@ -13,7 +13,7 @@ resource "aws_config_configuration_recorder" "recorder" {
 resource "aws_config_delivery_channel" "delivery" {
   name = "${var.project_prefix}-delivery"
   s3_bucket_name = var.centralized_log_bucket
-  s3_key_prefix = "config/"
+  s3_key_prefix = "config"
 
   depends_on = [ aws_config_configuration_recorder.recorder ]
 }
@@ -42,5 +42,5 @@ resource "aws_iam_role" "config_role" {
 
 resource "aws_iam_role_policy_attachment" "config_policy_attach" {
   role       = aws_iam_role.config_role.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSConfigRole"
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSConfigRoleForOrganizations"
 }
