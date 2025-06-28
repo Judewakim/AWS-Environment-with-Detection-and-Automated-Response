@@ -1,75 +1,89 @@
-# AWS Detection & Response Framework
+# 🌩️ Amaani AWS Cloud Security Framework
 
-  This project is a modular, Terraform-based AWS security solution that integrates native AWS services to build a detection and response framework suitable for mid-market and enterprise environments.
+This project is a modular, Terraform-based, plug-and-play AWS security solution that integrates native AWS services to create a detection, response, and compliance framework for modern, security-conscious organizations.
 
-  While a sample VPC environment with EC2 and RDS resources is deployed for testing, the focus of this project is the security services and automation foundation that will evolve into a reusable security framework.
+While the repository includes a sample VPC environment with EC2 and RDS resources to simulate a client workload, the primary focus is building a **reusable, scalable security automation layer** designed for real-world production environments.
 
+---
 
+![Network Architecture](networkDiagram.png)
 
+---
 
-   ![Network Architecture](networkDiagram.png)
+## 🔐 Project Focus
 
-  ## 🔐 Project Focus
+This project orchestrates foundational AWS security services to enable:
 
-  The core of this project is the orchestration of AWS security services:
+- ✅ **Resource monitoring** via **AWS Config**
+- ✅ **API activity logging** with **AWS CloudTrail**
+- ✅ **Threat detection** through **Amazon GuardDuty**
+- ✅ **Central alerting** via **SNS**
+- ✅ **IAM hardening**, password/MFA enforcement, and Access Analyzer
+- ✅ **Event-driven remediation** using **EventBridge + Lambda**
+- ✅ **Terraform-first deployment** with modular toggles
+- ✅ **Compliance mapping** to CIS/NIST frameworks
 
-  - **AWS Config** for resource inventory, compliance auditing, and change tracking
-  - **AWS CloudTrail** for API activity logging across the account
-  - **Amazon GuardDuty** for continuous threat detection and anomaly monitoring
-  - **AWS Security Hub** for centralized compliance insights and standardized findings
-  - **SNS** for alert distribution and notification
-  - **Terraform** for modular, scalable infrastructure-as-code
-  - **Third-party Security Tools** for a robust,secure environment
+---
 
-  Future enhancements will include **EventBridge-triggered Lambda** automation to remediate findings in real time (e.g., EC2 isolation, IAM access revocation).
-  
-  ## 🛠️ Modules
+## 🛠️ Terraform Modules
 
-  - **security_services**: 
-    - Enables GuardDuty (regional + multi-AZ support)
-    - Configures AWS Config with global + regional resource recorders
-    - Sets up CloudTrail logging to a secured S3 bucket
-    - Optionally enables Security Hub and selected standards
-  - **sns_alerts**: 
-    - Creates SNS topic for notifications
-    - Email-based alert subscription for findings and compliance events
-  - **s3_logging**: 
-    - Creates encrypted logging buckets for Config and CloudTrail
-  - **network** *(demo/test only)*: 
-    - VPC with public/private subnets, NAT, and route tables
-  - **ec2** *(demo/test only)*: 
-    - Bastion and Web Server with IAM roles and SSM support
-  - **rds** *(demo/test only)*: 
-    - Encrypted PostgreSQL instance with subnet group
+Each module can be toggled on/off using `terraform.tfvars`.
 
-  ## 🧪 Test Environment
+| Module            | Description                                                                 |
+|-------------------|-----------------------------------------------------------------------------|
+| `security_services` | Core detection layer: Config, CloudTrail, GuardDuty, IAM, Access Analyzer  |
+| `sns_alerts`        | Alerting channel for findings and compliance issues                        |
+| `s3_logging`        | Secure, encrypted logging buckets for Config and CloudTrail                |
+| `network` *(demo)*  | Test VPC with public/private subnets and NAT                               |
+| `ec2` *(demo)*      | Bastion + Web server with IAM roles and SSM                                |
+| `rds` *(demo)*      | Private encrypted MySQL instance                                           |
 
-  The EC2 and RDS deployments simulate a client workload for evaluating the security framework. You can replace or extend this with your actual infrastructure.
+---
 
-  - Bastion: SSH or SSM-based administration
-  - Web Server: Public endpoint for HTTP access
-  - RDS: Encrypted private database instance
+## 🧪 Test Environment (Client Simulation)
 
-  ## 📊 Security Hub Standards Enabled
+The EC2 and RDS modules simulate a typical client workload for validation and testing:
 
-  If `enable_securityhub = true`, the following standards are automatically enabled and findings routed to Security Hub:
+- **Bastion Host**: SSH/SSM management gateway
+- **Web Server**: Public-facing test endpoint
+- **RDS**: Encrypted database in private subnet
 
-  | Standard                                    | Description |
-  |---------------------------------------------|-------------|
-  | **CIS AWS Foundations Benchmark v1.2.0**    | Baseline security best practices |
-  | **AWS Foundational Security Best Practices**| Service-specific security checks |
-  | **PCI DSS v3.2.1**                          | Payment industry compliance mapping |
+These are **optional** and can be removed in production deployments.
 
-  Security Hub will auto-ingest findings from GuardDuty and AWS Config once the detector and recorder/delivery channels are properly initialized.
+---
 
-  ## ⚙️ Setup Instructions
+## 🛡️ IAM Strategy
 
-  1. **Clone the repository**
+This framework uses a hybrid IAM model:
 
-     ```bash
-     git clone https://github.com/Judewakim/AWS-Environment-with-Detection-and-Automated-Response.git
-     cd AWS-Environment-with-Detection-and-Automated-Response
-     ```
+- **IAM Groups** for Admin, Sales, and Accounting roles
+- **Task-Based Policies** for least privilege permissions (e.g., start EC2, read S3)
+- **Account-Level Controls** for password policy, MFA enforcement, and root lockdown
+- **IAM Access Analyzer** for trust boundary validation
+
+Everything is modular and toggleable via `terraform.tfvars`.
+
+---
+
+## 🧩 Config & Compliance Strategy
+
+This framework integrates AWS Config as the foundation for real-time compliance tracking and remediation, aligning infrastructure with CIS, NIST 800-53, and PCI DSS standards.
+
+All rules operate in audit mode by default. Violations are:
+
+- Marked as noncompliant in AWS Config
+- Forwarded to Security Hub (if enabled)
+- Routed to EventBridge, triggering future Lambda-based remediation
+
+---
+
+## ⚙️ Setup Instructions
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/Judewakim/AWS-Environment-with-Detection-and-Automated-Response.git
+   cd AWS-Environment-with-Detection-and-Automated-Response
+   ```
 
   2. **Initialize Terraform**
 
@@ -79,19 +93,36 @@
 
   3. **Configure your variables**
 
-     Create or edit `terraform.tfvars`:
+     Edit the `terraform.tfvars` file with your environment-specific values:
 
      ```hcl
      aws_region         = "us-east-1"
+     project_prefix     = "securecloud"
+
      key_name           = "your-key"
      ami_id             = "ami-xxxxxxx"
      instance_type      = "t3.micro"
+
      db_name            = "appdb"
      db_username        = "admin"
      db_password        = "SecurePassword123"
-     enable_guardduty   = true
-     enable_config      = true
-     enable_securityhub = true
+
+     enable_config             = true
+     enable_guardduty          = true
+     enable_iam                = true
+     enable_iam_access_analyzer = true
+
+     enable_admin_group        = true
+     enable_sales_group        = true
+     enable_accounting_group   = true
+
+     enable_s3_read_write_policy       = true
+     enable_ec2_start_stop_policy = true
+     enable_rds_read_only_policy  = true
+
+     enable_iam_config                  = false
+     enable_ec2_config                  = false
+     enable_rds_config                  = false
      ```
 
   4. **Deploy the stack**
@@ -104,10 +135,11 @@
 
   ## 🔁 Planned Automation
 
-  EventBridge rules and Lambda functions will soon be added to act on specific Security Hub findings:
+  EventBridge rules and Lambda functions will soon be added to act on specific Security Hub findings and will automatically:
 
   - Isolate EC2 instances flagged as compromised
   - Revoke IAM credentials for suspicious activity
+  - Rotate IAM credentials or lock users
   - Notify security teams with actionable context
   - Automatically remediate failed Config rules
 
@@ -117,3 +149,8 @@
 
   ```bash
   terraform destroy
+  ```
+
+  ## 🧠 About Amaani
+  
+  Amaani is a cloud-native security consultancy focused on building reusable, automated security frameworks for regulated and high-risk environments. This project is a showcase of the company's baseline hardening solution for AWS.

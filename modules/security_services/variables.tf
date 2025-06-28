@@ -33,6 +33,16 @@ variable "enable_cloudtrail" {
   default = false
 }
 
+variable "enable_iam" {
+  type    = bool
+  default = false
+}
+
+variable "enable_iam_access_analyzer" {
+  type    = bool
+  default = true
+}
+
 ############# CENTRALIZED BUCKET ##################
 variable "centralized_log_bucket" {
   description = "log bucket for config, guardduty, cloudtrail"
@@ -129,7 +139,7 @@ variable "global_service_events" {
   default = false
 }
 
-#########IAM###############
+#########IAM SERVICES###############
 variable "enable_admin_group" {
   type    = bool
   default = true
@@ -143,4 +153,34 @@ variable "enable_accounting_group" {
 variable "enable_sales_group" {
   type    = bool
   default = false
+}
+
+variable "enable_s3_read_write_policy" {
+  type    = bool
+  default = true
+}
+
+variable "enable_ec2_start_stop_policy" {
+  type    = bool
+  default = true
+}
+
+variable "enable_rds_read_only_policy" {
+  type    = bool
+  default = true
+}
+
+variable "enable_s3_read_only_policy" {
+  type    = bool
+  default = true
+}
+
+variable "enable_billing_read_only_policy" {
+  type    = bool
+  default = true 
+}
+
+variable "enable_securityhub_read_only_policy" {
+  type    = bool
+  default = true
 }

@@ -14,6 +14,20 @@ output "securityhub_enabled" {
   value       = var.enable_securityhub
 }
 
+output "cloudtrail_enabled" {
+  description = "Boolean flag indicting whether CloudTrail is enabled"
+  value = var.enable_cloudtrail
+}
+
+output "iam_enabled" {
+  description = "Boolean flag indicting whether AWS IAM is enabled"
+  value = var.enable_iam
+}
+
+output "iamaccessanalyzer_enabled" {
+  description = "Boolean flag indicting where AWS IAM Access Analyzer is enabled"
+  value = var.enable_iam_access_analyzer
+}
 
 //config
 output "config_bucket_name" {
@@ -77,4 +91,30 @@ output "cloudtrail_arn" {
 output "cloudtrail_name" {
   value       = var.enable_cloudtrail ? aws_cloudtrail.securecloud_trail[0].name : null
   description = "Name of the CloudTrail trail"
+}
+
+
+//iam
+output "ec2_start_stop_policy_arn" {
+  value       = length(aws_iam_policy.ec2_start_stop) > 0 ? aws_iam_policy.ec2_start_stop[0].arn : null
+}
+
+output "rds_read_only_policy_arn" {
+  value       = length(aws_iam_policy.rds_read_only) > 0 ? aws_iam_policy.rds_read_only[0].arn : null
+}
+
+output "s3_read_write_policy_arn" {
+  value       = length(aws_iam_policy.s3_read_write) > 0 ? aws_iam_policy.s3_read_write[0].arn : null
+}
+
+output "s3_read_only_policy_arn" {
+  value       = length(aws_iam_policy.s3_read_only) > 0 ? aws_iam_policy.s3_read_only[0].arn : null
+}
+
+output "billing_read_only_policy_arn" {
+  value       = length(aws_iam_policy.billing_read_only) > 0 ? aws_iam_policy.billing_read_only[0].arn : null
+}
+
+output "securityhub_read_only_policy_arn" {
+  value       = length(aws_iam_policy.securityhub_read_only) > 0 ? aws_iam_policy.securityhub_read_only[0].arn : null
 }
