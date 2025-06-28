@@ -39,7 +39,7 @@ variable "availability_zone_2" {
 ##########CENTRALIZED LOG BUCKET######################
 variable "centralized_log_bucket" {
   description = "log bucket for config, guardduty, cloudtrail"
-  type = string
+  type        = string
 
   validation {
     condition     = length(var.centralized_log_bucket) > 0
@@ -64,8 +64,18 @@ variable "enable_guardduty" {
 }
 
 variable "enable_cloudtrail" {
-  type = bool
+  type    = bool
   default = false
+}
+
+variable "enable_iam" {
+  type    = bool
+  default = false
+}
+
+variable "enable_iam_access_analyzer" {
+  type    = bool
+  default = true
 }
 
 
@@ -115,10 +125,10 @@ variable "enable_vpc_config" {
   default = false
 }
 
-#########IAM GROUPS#################
+##########IAM SERVICES###############
 variable "enable_admin_group" {
   type    = bool
-  default = true
+  default = false
 }
 
 variable "enable_accounting_group" {
@@ -127,6 +137,36 @@ variable "enable_accounting_group" {
 }
 
 variable "enable_sales_group" {
+  type    = bool
+  default = false
+}
+
+variable "enable_s3_read_write_policy" {
+  type    = bool
+  default = false
+}
+
+variable "enable_ec2_start_stop_policy" {
+  type    = bool
+  default = false
+}
+
+variable "enable_rds_read_only_policy" {
+  type    = bool
+  default = false
+}
+
+variable "enable_s3_read_only_policy" {
+  type    = bool
+  default = false
+}
+
+variable "enable_billing_read_only_policy" {
+  type    = bool
+  default = false
+}
+
+variable "enable_securityhub_read_only_policy" {
   type    = bool
   default = false
 }

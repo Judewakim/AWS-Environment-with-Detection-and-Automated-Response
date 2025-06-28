@@ -53,7 +53,7 @@ module "security_services" {
   enable_config      = var.enable_config
   enable_guardduty   = var.enable_guardduty
   enable_securityhub = var.enable_securityhub
-  enable_cloudtrail = var.enable_cloudtrail
+  enable_cloudtrail  = var.enable_cloudtrail
 
 
   # Fine-grained Config rule toggles
@@ -64,22 +64,22 @@ module "security_services" {
   enable_cloudfrontcloudwatch_config = var.enable_cloudfrontcloudwatch_config
   enable_acm_config                  = var.enable_acm_config
   enable_alb_config                  = var.enable_alb_config
-  enable_vpc_config                  = var.enable_vpc_config 
+  enable_vpc_config                  = var.enable_vpc_config
   # enable_vpc_config = module.security_services.enable_vpc_config
 
   # Centralized Log Bucket 
   centralized_log_bucket = module.s3_logging.log_bucket_name
-  log_bucket_name = var.centralized_log_bucket
-  bucket_name = var.centralized_log_bucket
+  log_bucket_name        = var.centralized_log_bucket
+  bucket_name            = var.centralized_log_bucket
 
   # IAM Groups
-  enable_admin_group = var.enable_admin_group
+  enable_admin_group      = var.enable_admin_group
   enable_accounting_group = var.enable_accounting_group
-  enable_sales_group = var.enable_sales_group
+  enable_sales_group      = var.enable_sales_group
 }
 module "s3_logging" {
-  source         = "./modules/s3_logging"
+  source = "./modules/s3_logging"
 
   project_prefix = var.project_prefix
-  environment = var.environment
+  environment    = var.environment
 }

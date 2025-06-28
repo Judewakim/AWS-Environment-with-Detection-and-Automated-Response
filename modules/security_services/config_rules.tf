@@ -28,6 +28,20 @@ resource "aws_config_config_rule" "root_account_mfa_enabled" {
   ]
 }
 
+resource "aws_config_config_rule" "root_access_keys_rotated" {
+  count = var.enable_config && var.enable_iam_config ? 1 : 0
+  name = "root-access-key-rotation"
+  source {
+    owner             = "AWS"
+    source_identifier = "IAM_ROOT_ACCESS_KEY_CHECK"
+  }
+  depends_on = [
+    aws_config_configuration_recorder.recorder,
+    aws_config_delivery_channel.delivery
+  ]
+}
+
+
 resource "aws_config_config_rule" "mfa_for_iam_console_access" {
   count = var.enable_config && var.enable_iam_config ? 1 : 0
   name   = "mfa-for-iam-console-access"
