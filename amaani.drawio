@@ -61,11 +61,11 @@
         <mxCell id="KjCvUa1PRuN88ewenq66-65" value="Public Subnet" style="sketch=0;outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_subnet;strokeColor=#879196;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#879196;dashed=0;" vertex="1" parent="1">
           <mxGeometry x="247.25" y="717" width="287.75" height="132" as="geometry" />
         </mxCell>
-        <mxCell id="KjCvUa1PRuN88ewenq66-69" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="KjCvUa1PRuN88ewenq66-58" target="KjCvUa1PRuN88ewenq66-66">
+        <mxCell id="KjCvUa1PRuN88ewenq66-70" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="KjCvUa1PRuN88ewenq66-58" target="KjCvUa1PRuN88ewenq66-66">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="KjCvUa1PRuN88ewenq66-58" value="IGW" style="outlineConnect=0;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;shape=mxgraph.aws3.internet_gateway;fillColor=#F58534;gradientColor=none;" vertex="1" parent="1">
-          <mxGeometry x="719" y="763.5" width="52" height="56" as="geometry" />
+          <mxGeometry x="166" y="755" width="52" height="56" as="geometry" />
         </mxCell>
         <mxCell id="KjCvUa1PRuN88ewenq66-59" value="Web Server" style="image;aspect=fixed;perimeter=ellipsePerimeter;html=1;align=center;shadow=0;dashed=0;spacingTop=3;image=img/lib/active_directory/web_server.svg;" vertex="1" parent="1">
           <mxGeometry x="292" y="746" width="68.8" height="86" as="geometry" />
@@ -83,7 +83,7 @@
           <mxGeometry x="206" y="649" width="120" height="30" as="geometry" />
         </mxCell>
         <mxCell id="KjCvUa1PRuN88ewenq66-66" value="Internet" style="image;aspect=fixed;perimeter=ellipsePerimeter;html=1;align=center;shadow=0;dashed=0;spacingTop=3;image=img/lib/active_directory/internet_cloud.svg;" vertex="1" parent="1">
-          <mxGeometry x="881" y="758.13" width="105.95" height="66.75" as="geometry" />
+          <mxGeometry x="-44" y="717" width="105.95" height="66.75" as="geometry" />
         </mxCell>
         <mxCell id="KjCvUa1PRuN88ewenq66-68" value="CloudWatch" style="outlineConnect=0;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;shape=mxgraph.aws3.cloudwatch;fillColor=#759C3E;gradientColor=none;" vertex="1" parent="1">
           <mxGeometry x="459" y="110" width="82.5" height="93" as="geometry" />
